@@ -24,8 +24,8 @@ using namespace std;
 //_______________________________________________________________________
 G4ExampleSubsystem::G4ExampleSubsystem(const std::string &name)
   : PHG4DetectorSubsystem(name, 0)
-  , detector_(nullptr)
-  , steppingAction_(nullptr)
+  , m_Detector(nullptr)
+  , m_SteppingAction(nullptr)
 {
   InitializeParameters();
   Name(name);
@@ -39,9 +39,9 @@ int G4ExampleSubsystem::InitRunSubsystem(PHCompositeNode *topNode)
   PHCompositeNode *dstNode = dynamic_cast<PHCompositeNode *>(iter.findFirst("PHCompositeNode", "DST"));
 
   // create detector
-  detector_ = new G4ExampleDetector(this, topNode, GetParams(), Name());
-  detector_->SuperDetector(SuperDetector());
-  detector_->OverlapCheck(CheckOverlap());
+  m_Detector = new G4ExampleDetector(this, topNode, GetParams(), Name());
+  m_Detector->SuperDetector(SuperDetector());
+  m_Detector->OverlapCheck(CheckOverlap());
 
   set<string> nodes;
   if (GetParams()->get_int_param("active"))
@@ -73,7 +73,7 @@ int G4ExampleSubsystem::InitRunSubsystem(PHCompositeNode *topNode)
       }
     }
     // create stepping action
-    steppingAction_ = new G4ExampleSteppingAction(detector_, GetParams());
+    m_SteppingAction = new G4ExampleSteppingAction(m_Detector, GetParams());
   }
 
   return 0;
@@ -84,9 +84,9 @@ int G4ExampleSubsystem::process_event(PHCompositeNode *topNode)
 {
   // pass top node to stepping action so that it gets
   // relevant nodes needed internally
-  if (steppingAction_)
+  if (m_SteppingAction)
   {
-    steppingAction_->SetInterfacePointers(topNode);
+    m_SteppingAction->SetInterfacePointers(topNode);
   }
   return 0;
 }
@@ -94,9 +94,9 @@ int G4ExampleSubsystem::process_event(PHCompositeNode *topNode)
 void G4ExampleSubsystem::Print(const string &what) const
 {
   //cout << "PSTOF Parameters: " << endl;
-  if (detector_)
+  if (m_Detector)
   {
-    detector_->Print(what);
+    m_Detector->Print(what);
   }
   return;
 }
@@ -104,13 +104,7 @@ void G4ExampleSubsystem::Print(const string &what) const
 //_______________________________________________________________________
 PHG4Detector *G4ExampleSubsystem::GetDetector(void) const
 {
-  return detector_;
-}
-
-//_______________________________________________________________________
-PHG4SteppingAction *G4ExampleSubsystem::GetSteppingAction(void) const
-{
-  return steppingAction_;
+  return m_Detector;
 }
 
 void G4ExampleSubsystem::SetDefaultParameters()

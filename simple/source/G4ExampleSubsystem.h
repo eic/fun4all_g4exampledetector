@@ -35,7 +35,7 @@ class G4ExampleSubsystem : public PHG4DetectorSubsystem
   }
 
   /*!
-  creates the detector_ object and place it on the node tree, under "DETECTORS" node (or whatever)
+  creates the m_Detector object and place it on the node tree, under "DETECTORS" node (or whatever)
   reates the stepping action and place it on the node tree, under "ACTIONS" node
   creates relevant hit nodes that will be populated by the stepping action and stored in the output DST
   */
@@ -49,8 +49,8 @@ class G4ExampleSubsystem : public PHG4DetectorSubsystem
   virtual int process_event(PHCompositeNode*);
 
   //! accessors (reimplemented)
-  virtual PHG4Detector* GetDetector(void) const;
-  virtual PHG4SteppingAction* GetSteppingAction(void) const;
+  virtual PHG4Detector* GetDetector() const;
+  virtual PHG4SteppingAction* GetSteppingAction() const {return  m_SteppingAction;}
   //! Print info (from SubsysReco)
   virtual void Print(const std::string& what = "ALL") const;
 
@@ -59,11 +59,11 @@ class G4ExampleSubsystem : public PHG4DetectorSubsystem
 
   //! detector geometry
   /*! defives from PHG4Detector */
-  G4ExampleDetector* detector_;
+  G4ExampleDetector* m_Detector;
 
   //! particle tracking "stepping" action
   /*! derives from PHG4SteppingActions */
-  PHG4SteppingAction* steppingAction_;
+  PHG4SteppingAction* m_SteppingAction;
 };
 
 #endif  // G4_EXAMPLESUBSYSTEM_H
