@@ -17,6 +17,7 @@ AM_LDFLAGS = \
 
 libg4exampledetector_la_LIBADD = \
   -lSubsysReco \
+  -lg4detectors \
   -lg4testbench 
 
 pkginclude_HEADERS = \
