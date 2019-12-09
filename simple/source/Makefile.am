@@ -20,7 +20,7 @@ libg4exampledetector_la_LIBADD = \
   -lg4testbench 
 
 pkginclude_HEADERS = \
-  G4exampleSubsystem.h
+  G4ExampleSubsystem.h
 
 # I/O dictionaries have to exist for root5 and root6. For ROOT6 we need
 # pcm files in addition. If someone can figure out how to make a list
@@ -39,15 +39,15 @@ pcmdir = $(libdir)
 nobase_dist_pcm_DATA =
 else
   ROOT5_DICTS = \
-  G4exampleSubsystem_Dict.cc
+  G4ExampleSubsystem_Dict.cc
 endif
 
 
 libg4exampledetector_la_SOURCES = \
   $(ROOT5_DICTS) \
-  G4exampleDetector.cc \
-  G4exampleSubsystem.cc \
-  G4exampleSteppingAction.cc
+  G4ExampleDetector.cc \
+  G4ExampleSubsystem.cc \
+  G4ExampleSteppingAction.cc
 
 # Rule for generating table CINT dictionaries.
 %_Dict.cc: %.h %LinkDef.h
