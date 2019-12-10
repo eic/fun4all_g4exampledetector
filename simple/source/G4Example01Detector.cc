@@ -1,4 +1,4 @@
-#include "G4ExampleDetector.h"
+#include "G4Example01Detector.h"
 
 #include <g4main/PHG4Detector.h>  // for PHG4Detector
 
@@ -22,7 +22,7 @@ class PHCompositeNode;
 
 using namespace std;
 
-G4ExampleDetector::G4ExampleDetector(PHG4Subsystem *subsys, PHCompositeNode *Node, PHParameters *params, const std::string &dnam)
+G4Example01Detector::G4Example01Detector(PHG4Subsystem *subsys, PHCompositeNode *Node, PHParameters *params, const std::string &dnam)
   : PHG4Detector(subsys, Node, dnam)
   , m_Params(params)
 {
@@ -30,7 +30,7 @@ G4ExampleDetector::G4ExampleDetector(PHG4Subsystem *subsys, PHCompositeNode *Nod
 
 //_______________________________________________________________
 //_______________________________________________________________
-int G4ExampleDetector::IsInDIRC(G4VPhysicalVolume *volume) const
+int G4Example01Detector::IsInDIRC(G4VPhysicalVolume *volume) const
 {
   set<G4VPhysicalVolume *>::const_iterator iter = m_PhysicalVolumesSet.find(volume);
 
@@ -42,7 +42,7 @@ int G4ExampleDetector::IsInDIRC(G4VPhysicalVolume *volume) const
   return 0;
 }
 
-void G4ExampleDetector::ConstructMe(G4LogicalVolume *logicWorld)
+void G4Example01Detector::ConstructMe(G4LogicalVolume *logicWorld)
 {
   cout << "constructing DIRC" << endl;
   double cb_DIRC_bars_DZ = 340 * cm;
@@ -75,9 +75,9 @@ void G4ExampleDetector::ConstructMe(G4LogicalVolume *logicWorld)
   return;
 }
 
-void G4ExampleDetector::Print(const std::string &what) const
+void G4Example01Detector::Print(const std::string &what) const
 {
-  cout << "Example Detector:" << endl;
+  cout << "Example01 Detector:" << endl;
   if (what == "ALL" || what == "VOLUME")
   {
     cout << "Version 0.1" << endl;

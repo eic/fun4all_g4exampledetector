@@ -1,7 +1,7 @@
 // Tell emacs that this is a C++ source
 //  -*- C++ -*-.
-#ifndef G4_EXAMPLEDETECTOR_H
-#define G4_EXAMPLEDETECTOR_H
+#ifndef G4EXAMPLE01DETECTOR_H
+#define G4EXAMPLE01DETECTOR_H
 
 #include <g4main/PHG4Detector.h>
 
@@ -14,14 +14,14 @@ class PHCompositeNode;
 class PHG4Subsystem;
 class PHParameters;
 
-class G4ExampleDetector : public PHG4Detector
+class G4Example01Detector : public PHG4Detector
 {
  public:
   //! constructor
-  G4ExampleDetector(PHG4Subsystem *subsys, PHCompositeNode *Node, PHParameters *params_array, const std::string &dnam);
+  G4Example01Detector(PHG4Subsystem *subsys, PHCompositeNode *Node, PHParameters *params_array, const std::string &dnam);
 
   //! destructor
-  virtual ~G4ExampleDetector() {}
+  virtual ~G4Example01Detector() {}
 
   //! construct
   virtual void ConstructMe(G4LogicalVolume *world);
@@ -43,4 +43,4 @@ class G4ExampleDetector : public PHG4Detector
   std::string m_SuperDetector;
 };
 
-#endif  // G4_EXAMPLEDETECTOR_H
+#endif  // G4EXAMPLE01DETECTOR_H
