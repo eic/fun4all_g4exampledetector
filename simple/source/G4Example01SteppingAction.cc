@@ -38,7 +38,7 @@ class PHCompositeNode;
 
 using namespace std;
 //____________________________________________________________________________..
-G4Example01SteppingAction::G4Example01SteppingAction(G4Example01Detector* detector, const PHParameters* parameters)
+G4Example01SteppingAction::G4Example01SteppingAction(G4Example01Detector* detector)
   : PHG4SteppingAction(detector->GetName())
   , m_Detector(detector)
   , m_HitContainer(nullptr)
@@ -85,13 +85,13 @@ bool G4Example01SteppingAction::UserSteppingAction(const G4Step* aStep, bool was
   G4double eion = (aStep->GetTotalEnergyDeposit() - aStep->GetNonIonizingEnergyDeposit()) / GeV;
   const G4Track* aTrack = aStep->GetTrack();
 
-  int layer_id = whichactive - 1;  // layer id is +1 in detector description
+  int detector_id = 0;  // we use here only one detector in this simple example
   bool geantino = false;
   // the check for the pdg code speeds things up, I do not want to make
   // an expensive string compare for every track when we know
   // geantino or chargedgeantino has pid=0
   if (aTrack->GetParticleDefinition()->GetPDGEncoding() == 0 &&
-      aTrack->GetParticleDefinition()->GetParticleName().find("geantino") != string::npos)
+      aTrack->GetParticleDefinition()->GetParticleName().find("geantino") != string::npos) // this also accounts for "chargedgeantino"
   {
     geantino = true;
   }
@@ -110,6 +110,7 @@ bool G4Example01SteppingAction::UserSteppingAction(const G4Step* aStep, bool was
     }
     else
     {
+// this is bad from G4 print out diagnostic to help debug, not sure if this is still with us
       cout << GetName() << ": New Hit for  " << endl;
       cout << "prestep status: " << PHG4StepStatusDecode::GetStepStatus(prePoint->GetStepStatus())
            << ", poststep status: " << PHG4StepStatusDecode::GetStepStatus(postPoint->GetStepStatus())
@@ -128,7 +129,7 @@ bool G4Example01SteppingAction::UserSteppingAction(const G4Step* aStep, bool was
     {
       m_Hit = new PHG4Hitv1();
     }
-    m_Hit->set_layer(layer_id);
+    m_Hit->set_layer(detector_id);
     //here we set the entrance values in cm
     m_Hit->set_x(0, prePoint->GetPosition().x() / cm);
     m_Hit->set_y(0, prePoint->GetPosition().y() / cm);
@@ -138,26 +139,20 @@ bool G4Example01SteppingAction::UserSteppingAction(const G4Step* aStep, bool was
     //set the track ID
     m_Hit->set_trkid(aTrack->GetTrackID());
     m_SaveTrackId = aTrack->GetTrackID();
-    if (G4VUserTrackInformation* p = aTrack->GetUserInformation())
-    {
-      if (PHG4TrackUserInfoV1* pp = dynamic_cast<PHG4TrackUserInfoV1*>(p))
-      {
-        m_Hit->set_trkid(pp->GetUserTrackId());
-      }
-    }
     //set the initial energy deposit
     m_EdepSum = 0;
     if (whichactive > 0)
     {
-      m_EionSum = 0;
+      m_EionSum = 0; // assuming the ionization energy is only needed for active volumes (scintillators)
       m_Hit->set_eion(0);
       m_SaveHitContainer = m_HitContainer;
     }
     else
     {
-      cout << "implement stuff for whichactive < 0" << endl;
+      cout << "implement stuff for whichactive < 0 (inactive volumes)" << endl;
       gSystem->Exit(1);
     }
+// this is for the tracking of the truth info
     if (G4VUserTrackInformation* p = aTrack->GetUserInformation())
     {
       if (PHG4TrackUserInfoV1* pp = dynamic_cast<PHG4TrackUserInfoV1*>(p))
@@ -172,7 +167,7 @@ bool G4Example01SteppingAction::UserSteppingAction(const G4Step* aStep, bool was
     break;
   }
 
-  // some sanity checks for inconsistencies
+  // some sanity checks for inconsistencies (aka bugs)
   // check if this hit was created, if not print out last post step status
   if (!m_Hit || !isfinite(m_Hit->get_x(0)))
   {
@@ -261,7 +256,7 @@ bool G4Example01SteppingAction::UserSteppingAction(const G4Step* aStep, bool was
       {
         m_Hit->set_eion(m_EionSum);
       }
-      m_SaveHitContainer->AddHit(layer_id, m_Hit);
+      m_SaveHitContainer->AddHit(detector_id, m_Hit);
       // ownership has been transferred to container, set to null
       // so we will create a new hit for the next track
       m_Hit = nullptr;
@@ -281,15 +276,7 @@ bool G4Example01SteppingAction::UserSteppingAction(const G4Step* aStep, bool was
 //____________________________________________________________________________..
 void G4Example01SteppingAction::SetInterfacePointers(PHCompositeNode* topNode)
 {
-  string hitnodename;
-  if (m_Detector->SuperDetector() != "NONE")
-  {
-    hitnodename = "G4HIT_" + m_Detector->SuperDetector();
-  }
-  else
-  {
-    hitnodename = "G4HIT_" + m_Detector->GetName();
-  }
+  string hitnodename = "G4HIT_" + m_Detector->GetName();
 
   //now look for the map and grab a pointer to it.
   m_HitContainer = findNode::getClass<PHG4HitContainer>(topNode, hitnodename);

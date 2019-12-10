@@ -3,7 +3,7 @@
 #ifndef G4EXAMPLE01SUBSYSTEM_H
 #define G4EXAMPLE01SUBSYSTEM_H
 
-#include <g4detectors/PHG4DetectorSubsystem.h>
+#include <g4main/PHG4Subsystem.h>
 
 #include <string>
 
@@ -13,33 +13,30 @@ class G4Example01Detector;
 class PHG4SteppingAction;
 
 /**
-   * \brief Fun4All module to simulate the Barrel PSTOF detector.
+   * \brief example Fun4All module
    *
    * The detector is constructed and registered via G4Example01Detector
    *
-   * The PHG4SteppingAction needs to be written, but will provide the info for the hit time
    *
    * \see G4Example01Detector
    * \see G4Example01Subsystem
    *
    */
-class G4Example01Subsystem : public PHG4DetectorSubsystem
+class G4Example01Subsystem : public PHG4Subsystem
 {
  public:
   //! constructor
-  G4Example01Subsystem(const std::string& name = "JLDIRC");
+  G4Example01Subsystem(const std::string& name = "Example01");
 
   //! destructor
-  virtual ~G4Example01Subsystem(void)
-  {
-  }
+  virtual ~G4Example01Subsystem(){}
 
   /*!
   creates the m_Detector object and place it on the node tree, under "DETECTORS" node (or whatever)
   reates the stepping action and place it on the node tree, under "ACTIONS" node
   creates relevant hit nodes that will be populated by the stepping action and stored in the output DST
   */
-  virtual int InitRunSubsystem(PHCompositeNode*);
+  virtual int Init(PHCompositeNode*);
 
   //! event processing
   /*!
@@ -50,12 +47,12 @@ class G4Example01Subsystem : public PHG4DetectorSubsystem
 
   //! accessors (reimplemented)
   virtual PHG4Detector* GetDetector() const;
+
   virtual PHG4SteppingAction* GetSteppingAction() const {return  m_SteppingAction;}
   //! Print info (from SubsysReco)
   virtual void Print(const std::string& what = "ALL") const;
 
  private:
-  void SetDefaultParameters();
 
   //! detector geometry
   /*! defives from PHG4Detector */

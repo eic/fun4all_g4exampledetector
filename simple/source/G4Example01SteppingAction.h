@@ -17,7 +17,7 @@ class G4Example01SteppingAction : public PHG4SteppingAction
 {
  public:
   //! constructor
-  G4Example01SteppingAction(G4Example01Detector*, const PHParameters*);
+  G4Example01SteppingAction(G4Example01Detector*);
 
   //! destructor
   virtual ~G4Example01SteppingAction();
