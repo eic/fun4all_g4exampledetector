@@ -31,7 +31,6 @@ G4Example01Detector::G4Example01Detector(PHG4Subsystem *subsys, PHCompositeNode 
 int G4Example01Detector::IsInDetector(G4VPhysicalVolume *volume) const
 {
   set<G4VPhysicalVolume *>::const_iterator iter = m_PhysicalVolumesSet.find(volume);
-
   if (iter != m_PhysicalVolumesSet.end())
   {
     return 1;
@@ -50,7 +49,7 @@ void G4Example01Detector::ConstructMe(G4LogicalVolume *logicWorld)
   G4VSolid *subtract = new G4SubtractionSolid("HoleInBox",solidbox,cylcut);
   G4LogicalVolume *logical = new G4LogicalVolume(subtract, G4Material::GetMaterial("G4_Al"), "BoxWithHoleLogical");
 
-  G4VisAttributes *vis = new G4VisAttributes(G4Color(G4Colour::Red()));
+  G4VisAttributes *vis = new G4VisAttributes(G4Color(G4Colour::Grey())); // grey is good to see the tracks in the display
   vis->SetForceSolid(true);
   logical->SetVisAttributes(vis);
   G4VPhysicalVolume *phy = new G4PVPlacement(nullptr, G4ThreeVector(0,0, 0),
