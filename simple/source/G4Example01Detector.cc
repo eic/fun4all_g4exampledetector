@@ -7,11 +7,10 @@
 #include <Geant4/G4LogicalVolume.hh>
 #include <Geant4/G4Material.hh>
 #include <Geant4/G4PVPlacement.hh>
-#include <Geant4/G4RotationMatrix.hh>  // for G4RotationMatrix
-#include <Geant4/G4String.hh>          // for G4String
+#include <Geant4/G4SubtractionSolid.hh>
 #include <Geant4/G4SystemOfUnits.hh>
-#include <Geant4/G4ThreeVector.hh>  // for G4ThreeVector
-#include <Geant4/G4Transform3D.hh>         // for G4Transform3D
+#include <Geant4/G4Tubs.hh>
+#include <Geant4/G4UnionSolid.hh>
 #include <Geant4/G4VisAttributes.hh>
 
 #include <cmath>
@@ -22,15 +21,14 @@ class PHCompositeNode;
 
 using namespace std;
 
-G4Example01Detector::G4Example01Detector(PHG4Subsystem *subsys, PHCompositeNode *Node, PHParameters *params, const std::string &dnam)
+G4Example01Detector::G4Example01Detector(PHG4Subsystem *subsys, PHCompositeNode *Node, const std::string &dnam)
   : PHG4Detector(subsys, Node, dnam)
-  , m_Params(params)
 {
 }
 
 //_______________________________________________________________
 //_______________________________________________________________
-int G4Example01Detector::IsInDIRC(G4VPhysicalVolume *volume) const
+int G4Example01Detector::IsInDetector(G4VPhysicalVolume *volume) const
 {
   set<G4VPhysicalVolume *>::const_iterator iter = m_PhysicalVolumesSet.find(volume);
 
@@ -44,34 +42,23 @@ int G4Example01Detector::IsInDIRC(G4VPhysicalVolume *volume) const
 
 void G4Example01Detector::ConstructMe(G4LogicalVolume *logicWorld)
 {
-  cout << "constructing DIRC" << endl;
-  double cb_DIRC_bars_DZ = 340 * cm;
-  double cb_DIRC_bars_DY = 42. * cm;
-  double cb_DIRC_bars_DX = 1.7 * cm;
-  double dR = 83.65 * cm;
-  double myL = 2 * M_PI * dR;
-  int NUM = myL / cb_DIRC_bars_DY;
-  double cb_DIRC_bars_deltaphi = 2 * M_PI / NUM;
-  string solidname = "cb_DIRC_bars_Solid";
-  G4VSolid *solid = new G4Box(solidname, cb_DIRC_bars_DX / 2., cb_DIRC_bars_DY / 2., cb_DIRC_bars_DZ / 2.);
-  string logicname = "cb_DIRC_bars_Logic";
-  G4LogicalVolume *logical = new G4LogicalVolume(solid, G4Material::GetMaterial("Quartz"), logicname);
-  G4VisAttributes *vis = new G4VisAttributes(G4Color(0., 1., 0., 1.0));
+  double xdim = 20*cm;
+  double ydim = 20*cm;
+  double zdim = 20*cm;
+  G4VSolid *solidbox = new G4Box("Example01BoxSolid", xdim/2., ydim/2., zdim/2.);
+  G4VSolid *cylcut = new G4Tubs("CylinderCutSolid", 0., xdim/4., zdim, 0., M_PI*rad);
+  G4VSolid *subtract = new G4SubtractionSolid("HoleInBox",solidbox,cylcut);
+  G4LogicalVolume *logical = new G4LogicalVolume(subtract, G4Material::GetMaterial("G4_Al"), "BoxWithHoleLogical");
+
+  G4VisAttributes *vis = new G4VisAttributes(G4Color(G4Colour::Red()));
   vis->SetForceSolid(true);
   logical->SetVisAttributes(vis);
-  for (int ia = 0; ia < NUM; ia++)
-  {
-    double phi = (ia * (cb_DIRC_bars_deltaphi));
-    double x = -dR * cos(phi);
-    double y = -dR * sin(phi);
-    G4RotationMatrix rot;
-    rot.rotateZ(cb_DIRC_bars_deltaphi * ia);
-    string physname = "cb_DIRC_bars_Phys_" + to_string(ia);
-    G4VPhysicalVolume *phy = new G4PVPlacement(G4Transform3D(rot, G4ThreeVector(x, y, -400)),
-                                               logical, physname,
-                                               logicWorld, ia, false, OverlapCheck());
+  G4VPhysicalVolume *phy = new G4PVPlacement(nullptr, G4ThreeVector(0,0, 0),
+                                               logical, "BoxWithHole",
+                                               logicWorld, 0, false, OverlapCheck());
+// add it to the list of placed volumes so the IsInDetector method
+// picks them up
     m_PhysicalVolumesSet.insert(phy);
-  }
   return;
 }
 

@@ -70,11 +70,11 @@ bool G4Example01SteppingAction::UserSteppingAction(const G4Step* aStep, bool was
   G4TouchableHandle touchpost = aStep->GetPostStepPoint()->GetTouchableHandle();
   // get volume of the current step
   G4VPhysicalVolume* volume = touch->GetVolume();
-  // IsInDIRC(volume) returns
-  //  == 0 outside of pstof
+  // IsInDetector(volume) returns
+  //  == 0 outside of detector
   //   > 0 for hits in active volume
   //  < 0 for hits in passive material
-  int whichactive = m_Detector->IsInDIRC(volume);
+  int whichactive = m_Detector->IsInDetector(volume);
   if (!whichactive)
   {
     return false;
