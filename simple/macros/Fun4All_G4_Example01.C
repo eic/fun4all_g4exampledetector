@@ -38,7 +38,8 @@ void Fun4All_G4_Example01(int nEvents = 1)
   recoConsts *rc = recoConsts::instance();
 // if you want to fix the random seed to reproduce results
 // set this flag
-// rc->set_IntFlag("RANDOMSEED",12345); 
+// nail this down so I know what the first event looks like...
+  rc->set_IntFlag("RANDOMSEED",12345); 
 
 //
 // Particle Generator
