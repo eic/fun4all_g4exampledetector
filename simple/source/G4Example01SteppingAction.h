@@ -11,7 +11,6 @@ class PHCompositeNode;
 class G4Example01Detector;
 class PHG4Hit;
 class PHG4HitContainer;
-class PHParameters;
 
 class G4Example01SteppingAction : public PHG4SteppingAction
 {

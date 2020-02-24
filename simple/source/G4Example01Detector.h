@@ -12,7 +12,6 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class PHCompositeNode;
 class PHG4Subsystem;
-class PHParameters;
 
 class G4Example01Detector : public PHG4Detector
 {
