@@ -3,7 +3,7 @@
 #ifndef G4EXAMPLE02SUBSYSTEM_H
 #define G4EXAMPLE02SUBSYSTEM_H
 
-#include <g4main/PHG4Subsystem.h>
+#include <g4detectors/PHG4DetectorSubsystem.h>
 
 #include <string>
 
@@ -22,7 +22,7 @@ class PHG4SteppingAction;
    * \see G4Example02Subsystem
    *
    */
-class G4Example02Subsystem : public PHG4Subsystem
+class G4Example02Subsystem : public PHG4DetectorSubsystem
 {
  public:
   //! constructor
@@ -36,7 +36,7 @@ class G4Example02Subsystem : public PHG4Subsystem
   reates the stepping action and place it on the node tree, under "ACTIONS" node
   creates relevant hit nodes that will be populated by the stepping action and stored in the output DST
   */
-  virtual int Init(PHCompositeNode*);
+  virtual int InitSubsystem(PHCompositeNode*);
 
   //! event processing
   /*!
@@ -53,6 +53,8 @@ class G4Example02Subsystem : public PHG4Subsystem
   virtual void Print(const std::string& what = "ALL") const;
 
  private:
+  // \brief Set default parameter values
+  void SetDefaultParameters();
 
   //! detector geometry
   /*! defives from PHG4Detector */

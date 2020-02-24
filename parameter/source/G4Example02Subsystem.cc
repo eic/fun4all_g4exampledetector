@@ -23,7 +23,7 @@ using namespace std;
 
 //_______________________________________________________________________
 G4Example02Subsystem::G4Example02Subsystem(const std::string &name)
-  : PHG4Subsystem(name)
+  : PHG4DetectorSubsystem(name)
   , m_Detector(nullptr)
   , m_SteppingAction(nullptr)
 {
@@ -31,7 +31,7 @@ G4Example02Subsystem::G4Example02Subsystem(const std::string &name)
 }
 
 //_______________________________________________________________________
-int G4Example02Subsystem::Init(PHCompositeNode *topNode)
+int G4Example02Subsystem::InitSubsystem(PHCompositeNode *topNode)
 {
   PHNodeIterator iter(topNode);
   PHCompositeNode *dstNode = dynamic_cast<PHCompositeNode *>(iter.findFirst("PHCompositeNode", "DST"));
@@ -86,4 +86,19 @@ void G4Example02Subsystem::Print(const string &what) const
 PHG4Detector *G4Example02Subsystem::GetDetector(void) const
 {
   return m_Detector;
+}
+
+void G4Example02Subsystem::SetDefaultParameters()
+{
+  set_default_double_param("place_x", 0.);
+  set_default_double_param("place_y", 0.);
+  set_default_double_param("place_z", 0.);
+  set_default_double_param("rot_x", 0.);
+  set_default_double_param("rot_y", 0.);
+  set_default_double_param("rot_z", 0.);
+  set_default_double_param("size_x", 10.);
+  set_default_double_param("size_y", 10.);
+  set_default_double_param("size_z", 10.);
+
+  set_default_string_param("material", "G4_Galactic");
 }
