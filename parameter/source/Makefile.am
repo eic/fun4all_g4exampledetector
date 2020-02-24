@@ -2,7 +2,7 @@ AUTOMAKE_OPTIONS = foreign
 
 # List of shared libraries to produce
 lib_LTLIBRARIES = \
-    libg4example01detector.la
+    libg4example02detector.la
 
 AM_CPPFLAGS = \
     -I$(includedir) \
@@ -15,13 +15,13 @@ AM_LDFLAGS = \
     -L$(libdir) \
     -L$(OFFLINE_MAIN)/lib
 
-libg4example01detector_la_LIBADD = \
+libg4example02detector_la_LIBADD = \
   -lSubsysReco \
   -lg4detectors \
   -lg4testbench 
 
 pkginclude_HEADERS = \
-  G4Example01Subsystem.h
+  G4Example02Subsystem.h
 
 # I/O dictionaries have to exist for root5 and root6. For ROOT6 we need
 # pcm files in addition. If someone can figure out how to make a list
@@ -40,15 +40,15 @@ pcmdir = $(libdir)
 nobase_dist_pcm_DATA =
 else
   ROOT5_DICTS = \
-  G4Example01Subsystem_Dict.cc
+  G4Example02Subsystem_Dict.cc
 endif
 
 
-libg4example01detector_la_SOURCES = \
+libg4example02detector_la_SOURCES = \
   $(ROOT5_DICTS) \
-  G4Example01Detector.cc \
-  G4Example01Subsystem.cc \
-  G4Example01SteppingAction.cc
+  G4Example02Detector.cc \
+  G4Example02Subsystem.cc \
+  G4Example02SteppingAction.cc
 
 # Rule for generating table CINT dictionaries.
 %_Dict.cc: %.h %LinkDef.h
@@ -63,11 +63,11 @@ libg4example01detector_la_SOURCES = \
 BUILT_SOURCES = testexternals.cc
 
 noinst_PROGRAMS = \
-  testexternals_g4example01
+  testexternals_g4example02
 
 
-testexternals_g4example01_SOURCES = testexternals.cc
-testexternals_g4example01_LDADD = libg4example01detector.la
+testexternals_g4example02_SOURCES = testexternals.cc
+testexternals_g4example02_LDADD = libg4example02detector.la
 
 
 testexternals.cc:
