@@ -12,8 +12,6 @@
 #include <phool/PHObject.h>        // for PHObject
 #include <phool/getClass.h>
 
-#include <sstream>
-
 using namespace std;
 
 //_______________________________________________________________________
