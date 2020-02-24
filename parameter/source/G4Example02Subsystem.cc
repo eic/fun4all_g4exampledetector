@@ -27,7 +27,9 @@ G4Example02Subsystem::G4Example02Subsystem(const std::string &name)
   , m_Detector(nullptr)
   , m_SteppingAction(nullptr)
 {
-  Name(name);
+  // call base class method which will set up parameter infrastructure
+  // and call our SetDefaultParameters() method
+  InitializeParameters();
 }
 
 //_______________________________________________________________________
