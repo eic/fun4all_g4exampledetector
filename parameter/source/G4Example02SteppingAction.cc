@@ -1,5 +1,8 @@
 #include "G4Example02SteppingAction.h"
+
 #include "G4Example02Detector.h"
+
+#include <phparameter/PHParameters.h>
 
 #include <g4detectors/PHG4StepStatusDecode.h>
 
@@ -38,9 +41,10 @@ class PHCompositeNode;
 
 using namespace std;
 //____________________________________________________________________________..
-G4Example02SteppingAction::G4Example02SteppingAction(G4Example02Detector* detector)
+G4Example02SteppingAction::G4Example02SteppingAction(G4Example02Detector* detector, const PHParameters* parameters)
   : PHG4SteppingAction(detector->GetName())
   , m_Detector(detector)
+  , m_Params(parameters)
   , m_HitContainer(nullptr)
   , m_Hit(nullptr)
   , m_SaveHitContainer(nullptr)
@@ -49,6 +53,7 @@ G4Example02SteppingAction::G4Example02SteppingAction(G4Example02Detector* detect
   , m_SaveTrackId(-1)
   , m_SavePreStepStatus(-1)
   , m_SavePostStepStatus(-1)
+  , m_ActiveFlag(m_Params->get_int_param("active"))
   , m_EdepSum(0)
   , m_EionSum(0)
 {

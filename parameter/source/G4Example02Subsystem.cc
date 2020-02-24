@@ -14,11 +14,6 @@
 #include <phool/PHObject.h>        // for PHObject
 #include <phool/getClass.h>
 
-#include <boost/foreach.hpp>
-
-#include <set>  // for set
-#include <sstream>
-
 using namespace std;
 
 //_______________________________________________________________________
@@ -44,6 +39,8 @@ int G4Example02Subsystem::InitSubsystem(PHCompositeNode *topNode)
     DetNode = new PHCompositeNode(Name());
     dstNode->addNode(DetNode);
   }
+  if (GetParams()->get_int_param("active"))
+  {
   string g4hitnodename = "G4HIT_" + Name();
   PHG4HitContainer *g4_hits = findNode::getClass<PHG4HitContainer>(DetNode, g4hitnodename);
   if (!g4_hits)
@@ -51,13 +48,13 @@ int G4Example02Subsystem::InitSubsystem(PHCompositeNode *topNode)
     g4_hits = new PHG4HitContainer(g4hitnodename);
     DetNode->addNode(new PHIODataNode<PHObject>(g4_hits, g4hitnodename, "PHObject"));
   }
-
+  }
   // create detector
-  m_Detector = new G4Example02Detector(this, topNode, Name());
+  m_Detector = new G4Example02Detector(this, topNode, GetParams(), Name());
   m_Detector->OverlapCheck(CheckOverlap());
 
   // create stepping action
-  m_SteppingAction = new G4Example02SteppingAction(m_Detector);
+  m_SteppingAction = new G4Example02SteppingAction(m_Detector, GetParams());
 
   return 0;
 }
@@ -76,7 +73,6 @@ int G4Example02Subsystem::process_event(PHCompositeNode *topNode)
 
 void G4Example02Subsystem::Print(const string &what) const
 {
-  //cout << "PSTOF Parameters: " << endl;
   if (m_Detector)
   {
     m_Detector->Print(what);
@@ -92,15 +88,18 @@ PHG4Detector *G4Example02Subsystem::GetDetector(void) const
 
 void G4Example02Subsystem::SetDefaultParameters()
 {
+// sizes are in cm
+// angles are in deg
+// units will be converted to G4 units when used
   set_default_double_param("place_x", 0.);
   set_default_double_param("place_y", 0.);
   set_default_double_param("place_z", 0.);
   set_default_double_param("rot_x", 0.);
   set_default_double_param("rot_y", 0.);
   set_default_double_param("rot_z", 0.);
-  set_default_double_param("size_x", 10.);
-  set_default_double_param("size_y", 10.);
-  set_default_double_param("size_z", 10.);
+  set_default_double_param("size_x", 20.);
+  set_default_double_param("size_y", 20.);
+  set_default_double_param("size_z", 20.);
 
   set_default_string_param("material", "G4_Galactic");
 }

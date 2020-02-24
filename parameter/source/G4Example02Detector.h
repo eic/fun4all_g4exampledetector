@@ -18,7 +18,7 @@ class G4Example02Detector : public PHG4Detector
 {
  public:
   //! constructor
-  G4Example02Detector(PHG4Subsystem *subsys, PHCompositeNode *Node, const std::string &dnam);
+  G4Example02Detector(PHG4Subsystem *subsys, PHCompositeNode *Node, PHParameters *parameters, const std::string &dnam);
 
   //! destructor
   virtual ~G4Example02Detector() {}
@@ -37,6 +37,8 @@ class G4Example02Detector : public PHG4Detector
   const std::string SuperDetector() const { return m_SuperDetector; }
 
  protected:
+  PHParameters *m_Params;
+
 // active volumes
   std::set<G4VPhysicalVolume *> m_PhysicalVolumesSet;
 
