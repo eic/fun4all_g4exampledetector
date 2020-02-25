@@ -35,7 +35,7 @@ class G4Example01Detector : public PHG4Detector
   void SuperDetector(const std::string &name) { m_SuperDetector = name; }
   const std::string SuperDetector() const { return m_SuperDetector; }
 
- protected:
+ private:
 // active volumes
   std::set<G4VPhysicalVolume *> m_PhysicalVolumesSet;
 
