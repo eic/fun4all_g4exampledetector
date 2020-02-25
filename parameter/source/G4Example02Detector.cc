@@ -77,6 +77,8 @@ void G4Example02Detector::Print(const std::string &what) const
   if (what == "ALL" || what == "VOLUME")
   {
     cout << "Version 0.1" << endl;
+    cout << "Parameters:" << endl;
+    m_Params->Print();
   }
   return;
 }
