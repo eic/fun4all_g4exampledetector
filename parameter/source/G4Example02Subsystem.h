@@ -36,7 +36,7 @@ class G4Example02Subsystem : public PHG4DetectorSubsystem
   reates the stepping action and place it on the node tree, under "ACTIONS" node
   creates relevant hit nodes that will be populated by the stepping action and stored in the output DST
   */
-  virtual int InitSubsystem(PHCompositeNode*);
+  virtual int InitRunSubsystem(PHCompositeNode*);
 
   //! event processing
   /*!

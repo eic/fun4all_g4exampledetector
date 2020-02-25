@@ -28,19 +28,19 @@ G4Example02Subsystem::G4Example02Subsystem(const std::string &name)
 }
 
 //_______________________________________________________________________
-int G4Example02Subsystem::InitSubsystem(PHCompositeNode *topNode)
+int G4Example02Subsystem::InitRunSubsystem(PHCompositeNode *topNode)
 {
   PHNodeIterator iter(topNode);
   PHCompositeNode *dstNode = dynamic_cast<PHCompositeNode *>(iter.findFirst("PHCompositeNode", "DST"));
   PHNodeIterator dstIter(dstNode);
+  if (GetParams()->get_int_param("active"))
+  {
   PHCompositeNode *DetNode = dynamic_cast<PHCompositeNode *>(dstIter.findFirst("PHCompositeNode", Name()));
   if (!DetNode)
   {
     DetNode = new PHCompositeNode(Name());
     dstNode->addNode(DetNode);
   }
-  if (GetParams()->get_int_param("active"))
-  {
   string g4hitnodename = "G4HIT_" + Name();
   PHG4HitContainer *g4_hits = findNode::getClass<PHG4HitContainer>(DetNode, g4hitnodename);
   if (!g4_hits)
@@ -52,10 +52,11 @@ int G4Example02Subsystem::InitSubsystem(PHCompositeNode *topNode)
   // create detector
   m_Detector = new G4Example02Detector(this, topNode, GetParams(), Name());
   m_Detector->OverlapCheck(CheckOverlap());
-
-  // create stepping action
-  m_SteppingAction = new G4Example02SteppingAction(m_Detector, GetParams());
-
+  // create stepping action if detector is active
+  if (GetParams()->get_int_param("active"))
+  {
+    m_SteppingAction = new G4Example02SteppingAction(m_Detector, GetParams());
+  }
   return 0;
 }
 
