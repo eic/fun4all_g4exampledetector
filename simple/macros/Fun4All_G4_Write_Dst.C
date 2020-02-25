@@ -11,7 +11,7 @@
 #include <g4main/PHG4SimpleEventGenerator.h>
 #include <g4main/PHG4ParticleGun.h>
 #include <g4main/PHG4Reco.h>
-#include <g4exampledetector/G4Example01Subsystem.h>
+#include <g4exampledetector01/G4Example01Subsystem.h>
 #include <phool/recoConsts.h>
 
 R__LOAD_LIBRARY(libfun4all.so)
