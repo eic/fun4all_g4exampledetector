@@ -1,6 +1,6 @@
-#include "G4Example02SteppingAction.h"
+#include "G4Example03SteppingAction.h"
 
-#include "G4Example02Detector.h"
+#include "G4Example03Detector.h"
 
 #include <phparameter/PHParameters.h>
 
@@ -41,8 +41,8 @@ class PHCompositeNode;
 
 using namespace std;
 //____________________________________________________________________________..
-G4Example02SteppingAction::G4Example02SteppingAction(
-    G4Example02Detector *detector, const PHParameters *parameters)
+G4Example03SteppingAction::G4Example03SteppingAction(
+    G4Example03Detector *detector, const PHParameters *parameters)
   : PHG4SteppingAction(detector->GetName())
   , m_Detector(detector)
   , m_Params(parameters)
@@ -61,7 +61,7 @@ G4Example02SteppingAction::G4Example02SteppingAction(
 {
 }
 
-G4Example02SteppingAction::~G4Example02SteppingAction()
+G4Example03SteppingAction::~G4Example03SteppingAction()
 {
   // if the last hit was a zero energie deposit hit, it is just reset
   // and the memory is still allocated, so we need to delete it here
@@ -71,7 +71,7 @@ G4Example02SteppingAction::~G4Example02SteppingAction()
 }
 
 //____________________________________________________________________________..
-bool G4Example02SteppingAction::UserSteppingAction(const G4Step *aStep,
+bool G4Example03SteppingAction::UserSteppingAction(const G4Step *aStep,
                                                    bool was_used)
 {
   G4TouchableHandle touch = aStep->GetPreStepPoint()->GetTouchableHandle();
@@ -304,7 +304,7 @@ bool G4Example02SteppingAction::UserSteppingAction(const G4Step *aStep,
 }
 
 //____________________________________________________________________________..
-void G4Example02SteppingAction::SetInterfacePointers(PHCompositeNode *topNode)
+void G4Example03SteppingAction::SetInterfacePointers(PHCompositeNode *topNode)
 {
   string hitnodename = "G4HIT_" + m_Detector->GetName();
 
@@ -314,7 +314,7 @@ void G4Example02SteppingAction::SetInterfacePointers(PHCompositeNode *topNode)
   // if we do not find the node we need to make it.
   if (!m_HitContainer)
   {
-    std::cout << "G4Example02SteppingAction::SetTopNode - unable to find "
+    std::cout << "G4Example03SteppingAction::SetTopNode - unable to find "
               << hitnodename << std::endl;
   }
 }

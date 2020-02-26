@@ -1,26 +1,26 @@
 // Tell emacs that this is a C++ source
 //  -*- C++ -*-.
-#ifndef G4EXAMPLE02STEPPINGACTION_H
-#define G4EXAMPLE02STEPPINGACTION_H
+#ifndef G4EXAMPLE03STEPPINGACTION_H
+#define G4EXAMPLE03STEPPINGACTION_H
 
 #include <g4main/PHG4SteppingAction.h>
 
 class G4Step;
 class G4VPhysicalVolume;
 class PHCompositeNode;
-class G4Example02Detector;
+class G4Example03Detector;
 class PHG4Hit;
 class PHG4HitContainer;
 class PHParameters;
 
-class G4Example02SteppingAction : public PHG4SteppingAction
+class G4Example03SteppingAction : public PHG4SteppingAction
 {
  public:
   //! constructor
-  G4Example02SteppingAction(G4Example02Detector*, const PHParameters* parameters);
+  G4Example03SteppingAction(G4Example03Detector*, const PHParameters* parameters);
 
   //! destructor
-  virtual ~G4Example02SteppingAction();
+  virtual ~G4Example03SteppingAction();
 
   //! stepping action
   virtual bool UserSteppingAction(const G4Step*, bool);
@@ -30,7 +30,7 @@ class G4Example02SteppingAction : public PHG4SteppingAction
 
  private:
   //! pointer to the detector
-  G4Example02Detector* m_Detector;
+  G4Example03Detector* m_Detector;
   const PHParameters* m_Params;
   //! pointer to hit container
   PHG4HitContainer* m_HitContainer;
@@ -48,4 +48,4 @@ class G4Example02SteppingAction : public PHG4SteppingAction
   double m_EionSum;
 };
 
-#endif  // G4EXAMPLE02STEPPINGACTION_H
+#endif  // G4EXAMPLE03STEPPINGACTION_H
