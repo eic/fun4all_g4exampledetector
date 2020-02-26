@@ -17,7 +17,7 @@ class G4Example02SteppingAction : public PHG4SteppingAction
 {
  public:
   //! constructor
-  G4Example02SteppingAction(G4Example02Detector *, const PHParameters *parameters);
+  G4Example02SteppingAction(G4Example02Detector*, const PHParameters* parameters);
 
   //! destructor
   virtual ~G4Example02SteppingAction();
@@ -31,7 +31,7 @@ class G4Example02SteppingAction : public PHG4SteppingAction
  private:
   //! pointer to the detector
   G4Example02Detector* m_Detector;
-  const PHParameters *m_Params;
+  const PHParameters* m_Params;
   //! pointer to hit container
   PHG4HitContainer* m_HitContainer;
   PHG4Hit* m_Hit;

@@ -10,32 +10,32 @@
 #include <g4main/PHG4HitContainer.h>
 #include <g4main/PHG4Hitv1.h>
 #include <g4main/PHG4Shower.h>
-#include <g4main/PHG4SteppingAction.h> // for PHG4SteppingAction
+#include <g4main/PHG4SteppingAction.h>  // for PHG4SteppingAction
 #include <g4main/PHG4TrackUserInfoV1.h>
 
 #include <phool/getClass.h>
 
 #include <TSystem.h>
 
-#include <Geant4/G4ParticleDefinition.hh>     // for G4ParticleDefinition
-#include <Geant4/G4ReferenceCountedHandle.hh> // for G4ReferenceCountedHandle
+#include <Geant4/G4ParticleDefinition.hh>      // for G4ParticleDefinition
+#include <Geant4/G4ReferenceCountedHandle.hh>  // for G4ReferenceCountedHandle
 #include <Geant4/G4Step.hh>
-#include <Geant4/G4StepPoint.hh>  // for G4StepPoint
-#include <Geant4/G4StepStatus.hh> // for fGeomBoundary, fAtRest...
-#include <Geant4/G4String.hh>     // for G4String
+#include <Geant4/G4StepPoint.hh>   // for G4StepPoint
+#include <Geant4/G4StepStatus.hh>  // for fGeomBoundary, fAtRest...
+#include <Geant4/G4String.hh>      // for G4String
 #include <Geant4/G4SystemOfUnits.hh>
-#include <Geant4/G4ThreeVector.hh>           // for G4ThreeVector
-#include <Geant4/G4TouchableHandle.hh>       // for G4TouchableHandle
-#include <Geant4/G4Track.hh>                 // for G4Track
-#include <Geant4/G4TrackStatus.hh>           // for fStopAndKill
-#include <Geant4/G4Types.hh>                 // for G4double
-#include <Geant4/G4VPhysicalVolume.hh>       // for G4VPhysicalVolume
-#include <Geant4/G4VTouchable.hh>            // for G4VTouchable
-#include <Geant4/G4VUserTrackInformation.hh> // for G4VUserTrackInformation
+#include <Geant4/G4ThreeVector.hh>            // for G4ThreeVector
+#include <Geant4/G4TouchableHandle.hh>        // for G4TouchableHandle
+#include <Geant4/G4Track.hh>                  // for G4Track
+#include <Geant4/G4TrackStatus.hh>            // for fStopAndKill
+#include <Geant4/G4Types.hh>                  // for G4double
+#include <Geant4/G4VPhysicalVolume.hh>        // for G4VPhysicalVolume
+#include <Geant4/G4VTouchable.hh>             // for G4VTouchable
+#include <Geant4/G4VUserTrackInformation.hh>  // for G4VUserTrackInformation
 
-#include <cmath> // for isfinite
+#include <cmath>  // for isfinite
 #include <iostream>
-#include <string> // for operator<<, string
+#include <string>  // for operator<<, string
 
 class PHCompositeNode;
 
@@ -43,15 +43,26 @@ using namespace std;
 //____________________________________________________________________________..
 G4Example02SteppingAction::G4Example02SteppingAction(
     G4Example02Detector *detector, const PHParameters *parameters)
-    : PHG4SteppingAction(detector->GetName()), m_Detector(detector),
-      m_Params(parameters), m_HitContainer(nullptr), m_Hit(nullptr),
-      m_SaveHitContainer(nullptr), m_SaveVolPre(nullptr),
-      m_SaveVolPost(nullptr), m_SaveTrackId(-1), m_SavePreStepStatus(-1),
-      m_SavePostStepStatus(-1), m_ActiveFlag(m_Params->get_int_param("active")),
-      m_BlackHoleFlag(m_Params->get_int_param("blackhole")), m_EdepSum(0),
-      m_EionSum(0) {}
+  : PHG4SteppingAction(detector->GetName())
+  , m_Detector(detector)
+  , m_Params(parameters)
+  , m_HitContainer(nullptr)
+  , m_Hit(nullptr)
+  , m_SaveHitContainer(nullptr)
+  , m_SaveVolPre(nullptr)
+  , m_SaveVolPost(nullptr)
+  , m_SaveTrackId(-1)
+  , m_SavePreStepStatus(-1)
+  , m_SavePostStepStatus(-1)
+  , m_ActiveFlag(m_Params->get_int_param("active"))
+  , m_BlackHoleFlag(m_Params->get_int_param("blackhole"))
+  , m_EdepSum(0)
+  , m_EionSum(0)
+{
+}
 
-G4Example02SteppingAction::~G4Example02SteppingAction() {
+G4Example02SteppingAction::~G4Example02SteppingAction()
+{
   // if the last hit was a zero energie deposit hit, it is just reset
   // and the memory is still allocated, so we need to delete it here
   // if the last hit was saved, hit is a nullptr pointer which are
@@ -61,7 +72,8 @@ G4Example02SteppingAction::~G4Example02SteppingAction() {
 
 //____________________________________________________________________________..
 bool G4Example02SteppingAction::UserSteppingAction(const G4Step *aStep,
-                                                   bool was_used) {
+                                                   bool was_used)
+{
   G4TouchableHandle touch = aStep->GetPreStepPoint()->GetTouchableHandle();
   G4TouchableHandle touchpost = aStep->GetPostStepPoint()->GetTouchableHandle();
   // get volume of the current step
@@ -71,7 +83,8 @@ bool G4Example02SteppingAction::UserSteppingAction(const G4Step *aStep,
   //   > 0 for hits in active volume
   //  < 0 for hits in passive material
   int whichactive = m_Detector->IsInDetector(volume);
-  if (!whichactive) {
+  if (!whichactive)
+  {
     return false;
   }
 
@@ -83,20 +96,21 @@ bool G4Example02SteppingAction::UserSteppingAction(const G4Step *aStep,
   const G4Track *aTrack = aStep->GetTrack();
 
   // if this block stops everything, just put all kinetic energy into edep
-  if (m_BlackHoleFlag) {
+  if (m_BlackHoleFlag)
+  {
     edep = aTrack->GetKineticEnergy() / GeV;
     G4Track *killtrack = const_cast<G4Track *>(aTrack);
     killtrack->SetTrackStatus(fStopAndKill);
   }
 
-  int detector_id = 0; // we use here only one detector in this simple example
+  int detector_id = 0;  // we use here only one detector in this simple example
   bool geantino = false;
   // the check for the pdg code speeds things up, I do not want to make
   // an expensive string compare for every track when we know
   // geantino or chargedgeantino has pid=0
   if (aTrack->GetParticleDefinition()->GetPDGEncoding() == 0 &&
       aTrack->GetParticleDefinition()->GetParticleName().find("geantino") !=
-          string::npos) // this also accounts for "chargedgeantino"
+          string::npos)  // this also accounts for "chargedgeantino"
   {
     geantino = true;
   }
@@ -106,11 +120,15 @@ bool G4Example02SteppingAction::UserSteppingAction(const G4Step *aStep,
   //       cout << "time prepoint: " << prePoint->GetGlobalTime() << endl;
   //       cout << "time postpoint: " << postPoint->GetGlobalTime() << endl;
 
-  switch (prePoint->GetStepStatus()) {
+  switch (prePoint->GetStepStatus())
+  {
   case fPostStepDoItProc:
-    if (m_SavePostStepStatus != fGeomBoundary) {
+    if (m_SavePostStepStatus != fGeomBoundary)
+    {
       break;
-    } else {
+    }
+    else
+    {
       // this is bad from G4 print out diagnostic to help debug, not sure if
       // this is still with us
       cout << GetName() << ": New Hit for  " << endl;
@@ -131,7 +149,8 @@ bool G4Example02SteppingAction::UserSteppingAction(const G4Step *aStep,
     }
   case fGeomBoundary:
   case fUndefined:
-    if (!m_Hit) {
+    if (!m_Hit)
+    {
       m_Hit = new PHG4Hitv1();
     }
     m_Hit->set_layer(detector_id);
@@ -146,18 +165,23 @@ bool G4Example02SteppingAction::UserSteppingAction(const G4Step *aStep,
     m_SaveTrackId = aTrack->GetTrackID();
     // set the initial energy deposit
     m_EdepSum = 0;
-    if (whichactive > 0) {
-      m_EionSum = 0; // assuming the ionization energy is only needed for active
-                     // volumes (scintillators)
+    if (whichactive > 0)
+    {
+      m_EionSum = 0;  // assuming the ionization energy is only needed for active
+                      // volumes (scintillators)
       m_Hit->set_eion(0);
       m_SaveHitContainer = m_HitContainer;
-    } else {
+    }
+    else
+    {
       cout << "implement stuff for whichactive < 0 (inactive volumes)" << endl;
       gSystem->Exit(1);
     }
     // this is for the tracking of the truth info
-    if (G4VUserTrackInformation *p = aTrack->GetUserInformation()) {
-      if (PHG4TrackUserInfoV1 *pp = dynamic_cast<PHG4TrackUserInfoV1 *>(p)) {
+    if (G4VUserTrackInformation *p = aTrack->GetUserInformation())
+    {
+      if (PHG4TrackUserInfoV1 *pp = dynamic_cast<PHG4TrackUserInfoV1 *>(p))
+      {
         m_Hit->set_trkid(pp->GetUserTrackId());
         pp->GetShower()->add_g4hit_id(m_SaveHitContainer->GetID(),
                                       m_Hit->get_hit_id());
@@ -171,7 +195,8 @@ bool G4Example02SteppingAction::UserSteppingAction(const G4Step *aStep,
 
   // some sanity checks for inconsistencies (aka bugs)
   // check if this hit was created, if not print out last post step status
-  if (!m_Hit || !isfinite(m_Hit->get_x(0))) {
+  if (!m_Hit || !isfinite(m_Hit->get_x(0)))
+  {
     cout << GetName() << ": hit was not created" << endl;
     cout << "prestep status: "
          << PHG4StepStatusDecode::GetStepStatus(prePoint->GetStepStatus())
@@ -190,7 +215,8 @@ bool G4Example02SteppingAction::UserSteppingAction(const G4Step *aStep,
     gSystem->Exit(1);
   }
   // check if track id matches the initial one when the hit was created
-  if (aTrack->GetTrackID() != m_SaveTrackId) {
+  if (aTrack->GetTrackID() != m_SaveTrackId)
+  {
     cout << GetName() << ": hits do not belong to the same track" << endl;
     cout << "saved track: " << m_SaveTrackId
          << ", current trackid: " << aTrack->GetTrackID()
@@ -209,7 +235,8 @@ bool G4Example02SteppingAction::UserSteppingAction(const G4Step *aStep,
   // ceases to exist
   // sum up the energy to get total deposited
   m_EdepSum += edep;
-  if (whichactive > 0) {
+  if (whichactive > 0)
+  {
     m_EionSum += eion;
   }
   // if any of these conditions is true this is the last step in
@@ -223,9 +250,11 @@ bool G4Example02SteppingAction::UserSteppingAction(const G4Step *aStep,
   if (postPoint->GetStepStatus() == fGeomBoundary ||
       postPoint->GetStepStatus() == fWorldBoundary ||
       postPoint->GetStepStatus() == fAtRestDoItProc ||
-      aTrack->GetTrackStatus() == fStopAndKill) {
+      aTrack->GetTrackStatus() == fStopAndKill)
+  {
     // save only hits with energy deposit (or geantino)
-    if (m_EdepSum > 0 || geantino) {
+    if (m_EdepSum > 0 || geantino)
+    {
       // update values at exit coordinates and set keep flag
       // of track to keep
       m_Hit->set_x(1, postPoint->GetPosition().x() / cm);
@@ -233,28 +262,37 @@ bool G4Example02SteppingAction::UserSteppingAction(const G4Step *aStep,
       m_Hit->set_z(1, postPoint->GetPosition().z() / cm);
 
       m_Hit->set_t(1, postPoint->GetGlobalTime() / nanosecond);
-      if (G4VUserTrackInformation *p = aTrack->GetUserInformation()) {
-        if (PHG4TrackUserInfoV1 *pp = dynamic_cast<PHG4TrackUserInfoV1 *>(p)) {
-          pp->SetKeep(1); // we want to keep the track
+      if (G4VUserTrackInformation *p = aTrack->GetUserInformation())
+      {
+        if (PHG4TrackUserInfoV1 *pp = dynamic_cast<PHG4TrackUserInfoV1 *>(p))
+        {
+          pp->SetKeep(1);  // we want to keep the track
         }
       }
-      if (geantino) {
-        m_Hit->set_edep(-1); // only energy=0 g4hits get dropped, this way
-                             // geantinos survive the g4hit compression
-        if (whichactive > 0) {
+      if (geantino)
+      {
+        m_Hit->set_edep(-1);  // only energy=0 g4hits get dropped, this way
+                              // geantinos survive the g4hit compression
+        if (whichactive > 0)
+        {
           m_Hit->set_eion(-1);
         }
-      } else {
+      }
+      else
+      {
         m_Hit->set_edep(m_EdepSum);
       }
-      if (whichactive > 0) {
+      if (whichactive > 0)
+      {
         m_Hit->set_eion(m_EionSum);
       }
       m_SaveHitContainer->AddHit(detector_id, m_Hit);
       // ownership has been transferred to container, set to null
       // so we will create a new hit for the next track
       m_Hit = nullptr;
-    } else {
+    }
+    else
+    {
       // if this hit has no energy deposit, just reset it for reuse
       // this means we have to delete it in the dtor. If this was
       // the last hit we processed the memory is still allocated
@@ -266,14 +304,16 @@ bool G4Example02SteppingAction::UserSteppingAction(const G4Step *aStep,
 }
 
 //____________________________________________________________________________..
-void G4Example02SteppingAction::SetInterfacePointers(PHCompositeNode *topNode) {
+void G4Example02SteppingAction::SetInterfacePointers(PHCompositeNode *topNode)
+{
   string hitnodename = "G4HIT_" + m_Detector->GetName();
 
   // now look for the map and grab a pointer to it.
   m_HitContainer = findNode::getClass<PHG4HitContainer>(topNode, hitnodename);
 
   // if we do not find the node we need to make it.
-  if (!m_HitContainer) {
+  if (!m_HitContainer)
+  {
     std::cout << "G4Example02SteppingAction::SetTopNode - unable to find "
               << hitnodename << std::endl;
   }

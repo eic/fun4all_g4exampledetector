@@ -39,7 +39,7 @@ class G4Example02Detector : public PHG4Detector
  protected:
   PHParameters *m_Params;
 
-// active volumes
+  // active volumes
   std::set<G4VPhysicalVolume *> m_PhysicalVolumesSet;
 
   std::string m_SuperDetector;
