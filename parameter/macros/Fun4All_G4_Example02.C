@@ -12,24 +12,24 @@
 #include <g4main/PHG4SimpleEventGenerator.h>
 #include <g4main/PHG4ParticleGun.h>
 #include <g4main/PHG4Reco.h>
-#include <g4exampledetector01/G4Example01Subsystem.h>
+#include <g4exampledetector02/G4Example02Subsystem.h>
 #include <phool/recoConsts.h>
 
 R__LOAD_LIBRARY(libfun4all.so)
 R__LOAD_LIBRARY(libg4detectors.so)
-R__LOAD_LIBRARY(libg4example01detector.so)
+R__LOAD_LIBRARY(libg4example02detector.so)
 R__LOAD_LIBRARY(libg4histos.so)
 
 #endif
 
-void Fun4All_G4_Example01(int nEvents = 1)
+void Fun4All_G4_Example02(int nEvents = 1)
 {
 
   gSystem->Load("libfun4all");
   gSystem->Load("libg4detectors");
   gSystem->Load("libg4testbench");
   gSystem->Load("libg4histos");
-  gSystem->Load("libg4example01detector.so");
+  gSystem->Load("libg4example02detector.so");
 
   ///////////////////////////////////////////
   // Make the Server
@@ -59,7 +59,7 @@ void Fun4All_G4_Example01(int nEvents = 1)
   gun->set_name("pi-");
   //gun->set_name("geantino");
   //gun->set_name("proton");
-  gun->set_vtx(0, -5, -20); // shoots right into the original Examle01 volume
+  gun->set_vtx(0, -5, -20); // shoots right into the original Example02 volume
   gun->set_mom(0, 0, 1);
   se->registerSubsystem(gun);
 
@@ -72,8 +72,43 @@ void Fun4All_G4_Example01(int nEvents = 1)
 // try non default physics lists
   //g4Reco->SetPhysicsList("FTFP_BERT_HP");
 
-  G4Example01Subsystem *example01 = new G4Example01Subsystem("HoleInBox");
-  g4Reco->registerSubsystem(example01);
+  G4Example02Subsystem *example02 = new G4Example02Subsystem("HoleInBox");
+  example02->SetActive();
+  g4Reco->registerSubsystem(example02);
+
+  example02 = new G4Example02Subsystem("AnotherHoleInBox");
+  example02->set_double_param("place_x",40.);
+  example02->set_double_param("place_y",40.);
+  example02->set_double_param("rot_x",45.);
+  example02->set_string_param("material","G4_Fe");
+  example02->SetActive();
+  g4Reco->registerSubsystem(example02);
+
+  example02 = new G4Example02Subsystem("YetAnotherHoleInBox");
+  example02->set_double_param("place_x",-40.);
+  example02->set_double_param("place_z",40.);
+  example02->set_double_param("rot_y",45.);
+  example02->set_double_param("rot_z",45.);
+  example02->set_string_param("material","G4_Cu");
+  example02->SetActive();
+  g4Reco->registerSubsystem(example02);
+
+// This is our Black Hole - absorbs every particle
+  example02 = new G4Example02Subsystem("BewareOfTheBlackHole");
+  example02->set_double_param("place_z",40.);
+  example02->set_double_param("rot_y",45.);
+  example02->set_double_param("rot_z",45.);
+  example02->BlackHole();
+  example02->SetActive();
+  g4Reco->registerSubsystem(example02);
+
+// this is an inactive volume (no hits will be created)
+  example02 = new G4Example02Subsystem("InActiveHoleInBox");
+  example02->set_double_param("place_z",-40.);
+  example02->set_double_param("rot_y",45.);
+  example02->set_double_param("rot_z",45.);
+  example02->set_string_param("material","G4_W");
+  g4Reco->registerSubsystem(example02);
 
   se->registerSubsystem( g4Reco );
 
@@ -89,7 +124,7 @@ void Fun4All_G4_Example01(int nEvents = 1)
   // IOManagers...
   ///////////////////////////////////////////
    
-  // Fun4AllDstOutputManager *out = new Fun4AllDstOutputManager("DSTOUT","G4Example01.root");
+  // Fun4AllDstOutputManager *out = new Fun4AllDstOutputManager("DSTOUT","G4Example02.root");
   // out->Verbosity(10);
   // se->registerOutputManager(out);
 
@@ -102,7 +137,7 @@ void Fun4All_G4_Example01(int nEvents = 1)
     return 0;
   }
   se->run(nEvents);
-  example01->Print();
+  example02->Print();
   se->End();
   std::cout << "All done" << std::endl;
   delete se;

@@ -2,8 +2,6 @@
 #include "G4Example01Detector.h"
 #include "G4Example01SteppingAction.h"
 
-#include <phparameter/PHParameters.h>
-
 #include <g4main/PHG4HitContainer.h>
 #include <g4main/PHG4SteppingAction.h>  // for PHG4SteppingAction
 
@@ -14,11 +12,6 @@
 #include <phool/PHObject.h>        // for PHObject
 #include <phool/getClass.h>
 
-#include <boost/foreach.hpp>
-
-#include <set>  // for set
-#include <sstream>
-
 using namespace std;
 
 //_______________________________________________________________________
@@ -27,7 +20,6 @@ G4Example01Subsystem::G4Example01Subsystem(const std::string &name)
   , m_Detector(nullptr)
   , m_SteppingAction(nullptr)
 {
-  Name(name);
 }
 
 //_______________________________________________________________________

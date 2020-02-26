@@ -1,7 +1,7 @@
 // Tell emacs that this is a C++ source
 //  -*- C++ -*-.
-#ifndef G4EXAMPLE01DETECTOR_H
-#define G4EXAMPLE01DETECTOR_H
+#ifndef G4EXAMPLE02DETECTOR_H
+#define G4EXAMPLE02DETECTOR_H
 
 #include <g4main/PHG4Detector.h>
 
@@ -12,15 +12,16 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class PHCompositeNode;
 class PHG4Subsystem;
+class PHParameters;
 
-class G4Example01Detector : public PHG4Detector
+class G4Example02Detector : public PHG4Detector
 {
  public:
   //! constructor
-  G4Example01Detector(PHG4Subsystem *subsys, PHCompositeNode *Node, const std::string &dnam);
+  G4Example02Detector(PHG4Subsystem *subsys, PHCompositeNode *Node, PHParameters *parameters, const std::string &dnam);
 
   //! destructor
-  virtual ~G4Example01Detector() {}
+  virtual ~G4Example02Detector() {}
 
   //! construct
   virtual void ConstructMe(G4LogicalVolume *world);
@@ -35,11 +36,13 @@ class G4Example01Detector : public PHG4Detector
   void SuperDetector(const std::string &name) { m_SuperDetector = name; }
   const std::string SuperDetector() const { return m_SuperDetector; }
 
- private:
+ protected:
+  PHParameters *m_Params;
+
 // active volumes
   std::set<G4VPhysicalVolume *> m_PhysicalVolumesSet;
 
   std::string m_SuperDetector;
 };
 
-#endif  // G4EXAMPLE01DETECTOR_H
+#endif  // G4EXAMPLE02DETECTOR_H

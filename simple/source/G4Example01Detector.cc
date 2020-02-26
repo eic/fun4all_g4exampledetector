@@ -9,8 +9,8 @@
 #include <Geant4/G4PVPlacement.hh>
 #include <Geant4/G4SubtractionSolid.hh>
 #include <Geant4/G4SystemOfUnits.hh>
+#include <Geant4/G4ThreeVector.hh>
 #include <Geant4/G4Tubs.hh>
-#include <Geant4/G4UnionSolid.hh>
 #include <Geant4/G4VisAttributes.hh>
 
 #include <cmath>
