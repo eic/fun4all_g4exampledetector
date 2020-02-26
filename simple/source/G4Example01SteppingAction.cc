@@ -91,7 +91,7 @@ bool G4Example01SteppingAction::UserSteppingAction(const G4Step* aStep, bool was
   // an expensive string compare for every track when we know
   // geantino or chargedgeantino has pid=0
   if (aTrack->GetParticleDefinition()->GetPDGEncoding() == 0 &&
-      aTrack->GetParticleDefinition()->GetParticleName().find("geantino") != string::npos) // this also accounts for "chargedgeantino"
+      aTrack->GetParticleDefinition()->GetParticleName().find("geantino") != string::npos)  // this also accounts for "chargedgeantino"
   {
     geantino = true;
   }
@@ -110,7 +110,7 @@ bool G4Example01SteppingAction::UserSteppingAction(const G4Step* aStep, bool was
     }
     else
     {
-// this is bad from G4 print out diagnostic to help debug, not sure if this is still with us
+      // this is bad from G4 print out diagnostic to help debug, not sure if this is still with us
       cout << GetName() << ": New Hit for  " << endl;
       cout << "prestep status: " << PHG4StepStatusDecode::GetStepStatus(prePoint->GetStepStatus())
            << ", poststep status: " << PHG4StepStatusDecode::GetStepStatus(postPoint->GetStepStatus())
@@ -143,7 +143,7 @@ bool G4Example01SteppingAction::UserSteppingAction(const G4Step* aStep, bool was
     m_EdepSum = 0;
     if (whichactive > 0)
     {
-      m_EionSum = 0; // assuming the ionization energy is only needed for active volumes (scintillators)
+      m_EionSum = 0;  // assuming the ionization energy is only needed for active volumes (scintillators)
       m_Hit->set_eion(0);
       m_SaveHitContainer = m_HitContainer;
     }
@@ -152,7 +152,7 @@ bool G4Example01SteppingAction::UserSteppingAction(const G4Step* aStep, bool was
       cout << "implement stuff for whichactive < 0 (inactive volumes)" << endl;
       gSystem->Exit(1);
     }
-// this is for the tracking of the truth info
+    // this is for the tracking of the truth info
     if (G4VUserTrackInformation* p = aTrack->GetUserInformation())
     {
       if (PHG4TrackUserInfoV1* pp = dynamic_cast<PHG4TrackUserInfoV1*>(p))

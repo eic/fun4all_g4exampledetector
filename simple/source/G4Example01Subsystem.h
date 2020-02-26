@@ -29,7 +29,7 @@ class G4Example01Subsystem : public PHG4Subsystem
   G4Example01Subsystem(const std::string& name = "Example01");
 
   //! destructor
-  virtual ~G4Example01Subsystem(){}
+  virtual ~G4Example01Subsystem() {}
 
   /*!
   creates the m_Detector object and place it on the node tree, under "DETECTORS" node (or whatever)
@@ -48,12 +48,11 @@ class G4Example01Subsystem : public PHG4Subsystem
   //! accessors (reimplemented)
   virtual PHG4Detector* GetDetector() const;
 
-  virtual PHG4SteppingAction* GetSteppingAction() const {return  m_SteppingAction;}
+  virtual PHG4SteppingAction* GetSteppingAction() const { return m_SteppingAction; }
   //! Print info (from SubsysReco)
   virtual void Print(const std::string& what = "ALL") const;
 
  private:
-
   //! detector geometry
   /*! defives from PHG4Detector */
   G4Example01Detector* m_Detector;
