@@ -43,6 +43,7 @@ class G4Example02SteppingAction : public PHG4SteppingAction
   int m_SavePreStepStatus;
   int m_SavePostStepStatus;
   int m_ActiveFlag;
+  int m_BlackHoleFlag;
   double m_EdepSum;
   double m_EionSum;
 };
