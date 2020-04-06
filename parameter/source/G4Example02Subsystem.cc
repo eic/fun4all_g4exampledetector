@@ -1,4 +1,5 @@
 #include "G4Example02Subsystem.h"
+
 #include "G4Example02Detector.h"
 #include "G4Example02SteppingAction.h"
 
@@ -36,21 +37,18 @@ int G4Example02Subsystem::InitRunSubsystem(PHCompositeNode *topNode)
   PHNodeIterator dstIter(dstNode);
   if (GetParams()->get_int_param("active"))
   {
-    PHCompositeNode *DetNode = dynamic_cast<PHCompositeNode *>(
-        dstIter.findFirst("PHCompositeNode", Name()));
+    PHCompositeNode *DetNode = dynamic_cast<PHCompositeNode *>(dstIter.findFirst("PHCompositeNode", Name()));
     if (!DetNode)
     {
       DetNode = new PHCompositeNode(Name());
       dstNode->addNode(DetNode);
     }
     string g4hitnodename = "G4HIT_" + Name();
-    PHG4HitContainer *g4_hits =
-        findNode::getClass<PHG4HitContainer>(DetNode, g4hitnodename);
+    PHG4HitContainer *g4_hits = findNode::getClass<PHG4HitContainer>(DetNode, g4hitnodename);
     if (!g4_hits)
     {
       g4_hits = new PHG4HitContainer(g4hitnodename);
-      DetNode->addNode(
-          new PHIODataNode<PHObject>(g4_hits, g4hitnodename, "PHObject"));
+      DetNode->addNode(new PHIODataNode<PHObject>(g4_hits, g4hitnodename, "PHObject"));
     }
   }
   // create detector
