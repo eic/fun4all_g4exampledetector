@@ -35,8 +35,7 @@ G4Example02Detector::G4Example02Detector(PHG4Subsystem *subsys,
 //_______________________________________________________________
 int G4Example02Detector::IsInDetector(G4VPhysicalVolume *volume) const
 {
-  set<G4VPhysicalVolume *>::const_iterator iter =
-      m_PhysicalVolumesSet.find(volume);
+  set<G4VPhysicalVolume *>::const_iterator iter = m_PhysicalVolumesSet.find(volume);
   if (iter != m_PhysicalVolumesSet.end())
   {
     return 1;
@@ -50,16 +49,12 @@ void G4Example02Detector::ConstructMe(G4LogicalVolume *logicWorld)
   double xdim = m_Params->get_double_param("size_x") * cm;
   double ydim = m_Params->get_double_param("size_y") * cm;
   double zdim = m_Params->get_double_param("size_z") * cm;
-  G4VSolid *solidbox =
-      new G4Box("Example02BoxSolid", xdim / 2., ydim / 2., zdim / 2.);
-  G4VSolid *cylcut =
-      new G4Tubs("CylinderCutSolid", 0., xdim / 4., zdim, 0., M_PI * rad);
+  G4VSolid *solidbox = new G4Box("Example02BoxSolid", xdim / 2., ydim / 2., zdim / 2.);
+  G4VSolid *cylcut = new G4Tubs("CylinderCutSolid", 0., xdim / 4., zdim, 0., M_PI * rad);
   G4VSolid *subtract = new G4SubtractionSolid("HoleInBox", solidbox, cylcut);
-  G4LogicalVolume *logical = new G4LogicalVolume(
-      subtract, G4Material::GetMaterial("G4_Al"), "BoxWithHoleLogical");
+  G4LogicalVolume *logical = new G4LogicalVolume(subtract, G4Material::GetMaterial("G4_Al"), "BoxWithHoleLogical");
 
-  G4VisAttributes *vis = new G4VisAttributes(G4Color(
-      G4Colour::Grey()));  // grey is good to see the tracks in the display
+  G4VisAttributes *vis = new G4VisAttributes(G4Color(G4Colour::Grey()));  // grey is good to see the tracks in the display
   vis->SetForceSolid(true);
   logical->SetVisAttributes(vis);
   G4RotationMatrix *rotm = new G4RotationMatrix();

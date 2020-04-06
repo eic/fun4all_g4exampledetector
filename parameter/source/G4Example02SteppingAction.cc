@@ -109,8 +109,7 @@ bool G4Example02SteppingAction::UserSteppingAction(const G4Step *aStep,
   // an expensive string compare for every track when we know
   // geantino or chargedgeantino has pid=0
   if (aTrack->GetParticleDefinition()->GetPDGEncoding() == 0 &&
-      aTrack->GetParticleDefinition()->GetParticleName().find("geantino") !=
-          string::npos)  // this also accounts for "chargedgeantino"
+      aTrack->GetParticleDefinition()->GetParticleName().find("geantino") != string::npos)  // this also accounts for "chargedgeantino"
   {
     geantino = true;
   }
