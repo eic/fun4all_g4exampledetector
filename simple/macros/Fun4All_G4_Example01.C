@@ -7,18 +7,18 @@
 
 #include <g4histos/G4HitNtuple.h>
 
-#include <g4main/PHG4ParticleGeneratorBase.h>
 #include <g4main/PHG4ParticleGenerator.h>
-#include <g4main/PHG4SimpleEventGenerator.h>
+#include <g4main/PHG4ParticleGeneratorBase.h>
 #include <g4main/PHG4ParticleGun.h>
 #include <g4main/PHG4Reco.h>
+#include <g4main/PHG4SimpleEventGenerator.h>
 
-#include <fun4all/SubsysReco.h>
-#include <fun4all/Fun4AllServer.h>
-#include <fun4all/Fun4AllInputManager.h>
-#include <fun4all/Fun4AllDummyInputManager.h>
-#include <fun4all/Fun4AllOutputManager.h>
 #include <fun4all/Fun4AllDstOutputManager.h>
+#include <fun4all/Fun4AllDummyInputManager.h>
+#include <fun4all/Fun4AllInputManager.h>
+#include <fun4all/Fun4AllOutputManager.h>
+#include <fun4all/Fun4AllServer.h>
+#include <fun4all/SubsysReco.h>
 
 #include <phool/recoConsts.h>
 
@@ -29,22 +29,21 @@ R__LOAD_LIBRARY(libg4histos.so)
 
 void Fun4All_G4_Example01(int nEvents = 1)
 {
-
   ///////////////////////////////////////////
   // Make the Server
   //////////////////////////////////////////
   Fun4AllServer *se = Fun4AllServer::instance();
   recoConsts *rc = recoConsts::instance();
-// if you want to fix the random seed to reproduce results
-// set this flag
-// nail this down so I know what the first event looks like...
-//  rc->set_IntFlag("RANDOMSEED",12345); 
+  // if you want to fix the random seed to reproduce results
+  // set this flag
+  // nail this down so I know what the first event looks like...
+  //  rc->set_IntFlag("RANDOMSEED",12345);
 
-//
-// Particle Generator
-//
+  //
+  // Particle Generator
+  //
 
-// the PHG4ParticleGenerator makes cones using phi and eta
+  // the PHG4ParticleGenerator makes cones using phi and eta
   // PHG4ParticleGenerator *gen = new PHG4ParticleGenerator();
   // gen->set_name("e-");
   // gen->set_vtx(0, 0, 0);
@@ -58,44 +57,44 @@ void Fun4All_G4_Example01(int nEvents = 1)
   gun->set_name("pi-");
   //gun->set_name("geantino");
   //gun->set_name("proton");
-  gun->set_vtx(0, -5, -20); // shoots right into the original Examle01 volume
+  gun->set_vtx(0, -5, -20);  // shoots right into the original Examle01 volume
   gun->set_mom(0, 0, 1);
   se->registerSubsystem(gun);
 
-//
-// Geant4 setup
-//
-  PHG4Reco* g4Reco = new PHG4Reco();
-  g4Reco->set_field(0); // no field
+  //
+  // Geant4 setup
+  //
+  PHG4Reco *g4Reco = new PHG4Reco();
+  g4Reco->set_field(0);  // no field
   g4Reco->save_DST_geometry(false);
-// try non default physics lists
+  // try non default physics lists
   //g4Reco->SetPhysicsList("FTFP_BERT_HP");
 
   G4Example01Subsystem *example01 = new G4Example01Subsystem("HoleInBox");
   g4Reco->registerSubsystem(example01);
 
-  se->registerSubsystem( g4Reco );
+  se->registerSubsystem(g4Reco);
 
   ///////////////////////////////////////////
   // Fun4All modules
   ///////////////////////////////////////////
 
   G4HitNtuple *hits = new G4HitNtuple("Hits");
-  hits->AddNode("HoleInBox",0);
+  hits->AddNode("HoleInBox", 0);
   se->registerSubsystem(hits);
 
   ///////////////////////////////////////////
   // IOManagers...
   ///////////////////////////////////////////
-   
+
   // Fun4AllDstOutputManager *out = new Fun4AllDstOutputManager("DSTOUT","G4Example01.root");
   // out->Verbosity(10);
   // se->registerOutputManager(out);
 
-// this (dummy) input manager just drives the event loop
-  Fun4AllInputManager *in = new Fun4AllDummyInputManager( "Dummy");
-  se->registerInputManager( in );
-// events = 0 => run forever
+  // this (dummy) input manager just drives the event loop
+  Fun4AllInputManager *in = new Fun4AllDummyInputManager("Dummy");
+  se->registerInputManager(in);
+  // events = 0 => run forever
   if (nEvents <= 0)
   {
     return 0;
