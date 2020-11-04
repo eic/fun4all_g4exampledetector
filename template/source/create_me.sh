@@ -20,6 +20,6 @@ echo "  make install"
 echo
 echo "before testing, do not forget to source the setup_local.csh"
 echo
-echo "  source /opt/sphenix/core/bin/setup_local.csh $local_installdir"
+echo "  source $OPT_SPHENIX/bin/setup_local.csh $local_installdir"
 echo
 unset local_installdir
