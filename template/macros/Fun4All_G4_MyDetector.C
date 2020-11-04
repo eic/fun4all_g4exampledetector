@@ -1,26 +1,31 @@
-#if ROOT_VERSION_CODE >= ROOT_VERSION(6,00,0)
+#ifndef MACRO_FUN4ALLG4MYDETECTOR_C
+#define MACRO_FUN4ALLG4MYDETECTOR_C
+
+#include <mydetector/MyDetectorSubsystem.h>
+
+#include <g4detectors/PHG4DetectorSubsystem.h>
+
+#include <g4histos/G4HitNtuple.h>
+
+#include <g4main/PHG4ParticleGeneratorBase.h>
+#include <g4main/PHG4ParticleGenerator.h>
+#include <g4main/PHG4SimpleEventGenerator.h>
+#include <g4main/PHG4ParticleGun.h>
+#include <g4main/PHG4Reco.h>
+
 #include <fun4all/SubsysReco.h>
 #include <fun4all/Fun4AllServer.h>
 #include <fun4all/Fun4AllInputManager.h>
 #include <fun4all/Fun4AllDummyInputManager.h>
 #include <fun4all/Fun4AllOutputManager.h>
 #include <fun4all/Fun4AllDstOutputManager.h>
-#include <g4detectors/PHG4DetectorSubsystem.h>
-#include <g4histos/G4HitNtuple.h>
-#include <g4main/PHG4ParticleGeneratorBase.h>
-#include <g4main/PHG4ParticleGenerator.h>
-#include <g4main/PHG4SimpleEventGenerator.h>
-#include <g4main/PHG4ParticleGun.h>
-#include <g4main/PHG4Reco.h>
-#include <mydetector/MyDetectorSubsystem.h>
+
 #include <phool/recoConsts.h>
 
 R__LOAD_LIBRARY(libfun4all.so)
 R__LOAD_LIBRARY(libg4detectors.so)
 R__LOAD_LIBRARY(libMyDetector.so)
 R__LOAD_LIBRARY(libg4histos.so)
-
-#endif
 
 // needs 10000 geantinos to make a decent scan plot
 void Fun4All_G4_MyDetector(int nEvents = 10000)
@@ -124,3 +129,5 @@ void Fun4All_G4_MyDetector(int nEvents = 10000)
   cout << endl;
   gSystem->Exit(0);
 }
+
+#endif
