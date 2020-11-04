@@ -5,10 +5,7 @@
 
 #include <g4detectors/PHG4DetectorSubsystem.h>
 
-#if !defined(__CINT__) || defined(__CLING__)
 #include <array>   // for array
-#endif
-
 #include <string>
 
 class G4Example03Detector;
@@ -83,11 +80,7 @@ class G4Example03Subsystem : public PHG4DetectorSubsystem
   /*! derives from PHG4DisplayAction */
   PHG4DisplayAction* m_DisplayAction;
   //! Color setting if we want to override the default
-#if !defined(__CINT__) || defined(__CLING__)
   std::array<double, 4> m_ColorArray;
-#else
-  double m_ColorArray[4];
-#endif
 };
 
 #endif  // G4EXAMPLE03SUBSYSTEM_H
