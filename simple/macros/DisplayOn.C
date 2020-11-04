@@ -1,8 +1,9 @@
-#pragma once
-#if ROOT_VERSION_CODE >= ROOT_VERSION(6,00,0)
-#include <fun4all/Fun4AllServer.h>
+#ifndef MACRO_DISPLAYON_C
+#define MACRO_DISPLAYON_C
+
 #include <g4main/PHG4Reco.h>
-#endif
+
+#include <fun4all/Fun4AllServer.h>
 
 // This starts the QT based G4 gui which takes control
 // when x'ed out it will return a pointer to PHG4Reco so
@@ -52,3 +53,5 @@ void displaycmd()
   cout << "set background color:" << endl;
   cout << " g4->ApplyCommand(\"/vis/viewer/set/background white\")" << endl;
 }
+
+#endif

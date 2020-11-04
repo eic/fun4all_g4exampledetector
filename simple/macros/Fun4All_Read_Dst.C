@@ -1,4 +1,8 @@
-#if ROOT_VERSION_CODE >= ROOT_VERSION(6,00,0)
+#ifndef MACRO_FUN4ALLREADDST_C
+#define MACRO_FUN4ALLREADDST_C
+
+#include <g4histos/G4HitNtuple.h>
+
 #include <fun4all/SubsysReco.h>
 #include <fun4all/Fun4AllServer.h>
 #include <fun4all/Fun4AllInputManager.h>
@@ -6,21 +10,15 @@
 #include <fun4all/Fun4AllDummyInputManager.h>
 #include <fun4all/Fun4AllOutputManager.h>
 #include <fun4all/Fun4AllDstOutputManager.h>
-#include <g4histos/G4HitNtuple.h>
+
 #include <phool/recoConsts.h>
 
 R__LOAD_LIBRARY(libfun4all.so)
 R__LOAD_LIBRARY(libg4testbench.so)
 R__LOAD_LIBRARY(libg4histos.so)
 
-#endif
-
 void Fun4All_Read_Dst(int nEvents = 1)
 {
-
-  gSystem->Load("libfun4all");
-  gSystem->Load("libg4testbench");
-  gSystem->Load("libg4histos");
 
   ///////////////////////////////////////////
   // Make the Server
@@ -58,3 +56,5 @@ void Fun4All_Read_Dst(int nEvents = 1)
   delete se;
   gSystem->Exit(0);
 }
+
+#endif
