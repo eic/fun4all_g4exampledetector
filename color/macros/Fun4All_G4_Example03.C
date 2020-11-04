@@ -1,18 +1,25 @@
-#if ROOT_VERSION_CODE >= ROOT_VERSION(6,00,0)
+#ifndef MACRO_FUN4ALLG4EXAMPLE03_C
+#define MACRO_FUN4ALLG4EXAMPLE03_C
+
+#include <g4exampledetector03/G4Example03Subsystem.h>
+
+#include <g4detectors/PHG4DetectorSubsystem.h>
+
+#include <g4histos/G4HitNtuple.h>
+
+#include <g4main/PHG4ParticleGeneratorBase.h>
+#include <g4main/PHG4ParticleGenerator.h>
+#include <g4main/PHG4SimpleEventGenerator.h>
+#include <g4main/PHG4ParticleGun.h>
+#include <g4main/PHG4Reco.h>
+
 #include <fun4all/SubsysReco.h>
 #include <fun4all/Fun4AllServer.h>
 #include <fun4all/Fun4AllInputManager.h>
 #include <fun4all/Fun4AllDummyInputManager.h>
 #include <fun4all/Fun4AllOutputManager.h>
 #include <fun4all/Fun4AllDstOutputManager.h>
-#include <g4detectors/PHG4DetectorSubsystem.h>
-#include <g4histos/G4HitNtuple.h>
-#include <g4main/PHG4ParticleGeneratorBase.h>
-#include <g4main/PHG4ParticleGenerator.h>
-#include <g4main/PHG4SimpleEventGenerator.h>
-#include <g4main/PHG4ParticleGun.h>
-#include <g4main/PHG4Reco.h>
-#include <g4exampledetector03/G4Example03Subsystem.h>
+
 #include <phool/recoConsts.h>
 
 R__LOAD_LIBRARY(libfun4all.so)
@@ -20,17 +27,8 @@ R__LOAD_LIBRARY(libg4detectors.so)
 R__LOAD_LIBRARY(libg4example03detector.so)
 R__LOAD_LIBRARY(libg4histos.so)
 
-#endif
-
 void Fun4All_G4_Example03(int nEvents = 1)
 {
-
-  gSystem->Load("libfun4all");
-  gSystem->Load("libg4detectors");
-  gSystem->Load("libg4testbench");
-  gSystem->Load("libg4histos");
-  gSystem->Load("libg4example03detector.so");
-
   ///////////////////////////////////////////
   // Make the Server
   //////////////////////////////////////////
@@ -148,3 +146,5 @@ void Fun4All_G4_Example03(int nEvents = 1)
   delete se;
   gSystem->Exit(0);
 }
+
+#endif
